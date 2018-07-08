@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import './App.css';
 
 class App extends Component {
-  state = { seconds: 0 };
-  timer;
+  state = { seconds: 60 };
+  timer = null;
 
   componentWillUnmount() {
     clearInterval(this.timer);
   }
 
-  clearTimer = ()   => clearInterval(this.timer)
   pad        = time => time < 10 ? `0${time}`: time;
+  clearTimer = ()   => clearInterval(this.timer)
   
   /**
    * --------------------------------------------------
@@ -18,12 +19,7 @@ class App extends Component {
    */
   setTime = seconds => {
     this.setState({ seconds });
-
-    if (this.timer === 0) {
-      this.timer = setInterval(this.countDown, 1000);
-    }
-
-    this.startTimer(); 
+    this.startTimer();
   }
 
   /**
@@ -32,7 +28,7 @@ class App extends Component {
    * --------------------------------------------------
    */
   startTimer = () => {
-    if (this.timer == 0) this.timer = setInterval(this.countDown, 1000);
+    if (!this.timer) this.timer = setInterval(this.countDown, 1000);
   }
 
   /**
@@ -40,7 +36,7 @@ class App extends Component {
    * Decrement our counter
    * --------------------------------------------------
    */
-  countDown() {
+  countDown = () => {
     const seconds = this.state.seconds - 1;
     this.setState({ seconds });
     if (seconds === 0) clearInterval(this.timer);
@@ -57,7 +53,12 @@ class App extends Component {
     const minutes  = Math.floor(divisorM / 60);
     const divisorS = divisorM % 60;
     const seconds  = Math.ceil(divisorS);
-    return { hours: this.pad(hours), minutes: this.pad(minutes), seconds: this.pad(seconds) };
+
+    return { 
+      hours: this.pad(hours), 
+      minutes: this.pad(minutes), 
+      seconds: this.pad(seconds) 
+    };
   }
 
   /**
@@ -69,17 +70,23 @@ class App extends Component {
     const time = this.secondsToTime(this.state.seconds);
 
     return (
-      <div className="App">
+      <section className="hero">
+      <div className="hero-body">
+      <div className="container has-text-centered">
+
         {/* timer number */} 
-        <div>
-          {time.hours}:{time.minutes}:{time.seconds}
-        </div>
+        <h1 className="title is-1">
+          {time.minutes}:{time.seconds}
+        </h1>
 
         {/* set times */}
         <a className="button" onClick={() => this.setTime(30)}>0:30</a>
         <a className="button" onClick={() => this.setTime(60)}>1:00</a>
         <a className="button" onClick={() => this.setTime(90)}>1:30</a>
+
       </div>
+      </div>
+      </section>
     );
   }
 }
