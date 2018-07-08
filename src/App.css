@@ -1,3 +1,11 @@
 body {
   font-family: 'IBM Plex Mono';
 }
+
+h1 {
+  font-size: 150px !important;
+}
+
+.action-buttons .button:not(:last-child) {
+  margin-right: 8px;
+}

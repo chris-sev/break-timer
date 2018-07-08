@@ -11,6 +11,7 @@ class App extends Component {
 
   pad        = time => time < 10 ? `0${time}`: time;
   clearTimer = ()   => clearInterval(this.timer)
+  addThirty  = () => this.setState({ seconds: this.state.seconds + 30 });
   
   /**
    * --------------------------------------------------
@@ -70,20 +71,38 @@ class App extends Component {
     const time = this.secondsToTime(this.state.seconds);
 
     return (
-      <section className="hero">
+      <section className="hero is-fullheight is-info">
       <div className="hero-body">
       <div className="container has-text-centered">
 
-        {/* timer number */} 
-        <h1 className="title is-1">
-          {time.minutes}:{time.seconds}
+        {/* timer number ----------------------------------- */} 
+        <h1 
+          className="title is-1" 
+          onClick={this.addThirty}>
+            {time.minutes}:{time.seconds}
         </h1>
 
-        {/* set times */}
-        <a className="button" onClick={() => this.setTime(30)}>0:30</a>
-        <a className="button" onClick={() => this.setTime(60)}>1:00</a>
-        <a className="button" onClick={() => this.setTime(90)}>1:30</a>
+        {/* set times -------------------------------------- */}
+        <div className="action-buttons">
+          <a 
+            className="button is-white is-outlined is-rounded" 
+            onClick={() => this.setTime(30)}>
+              0:30
+          </a>
 
+          <a 
+            className="button is-white is-outlined is-rounded" 
+            onClick={() => this.setTime(60)}>
+              1:00
+          </a>
+
+          <a 
+            className="button is-white is-outlined is-rounded" 
+            onClick={() => this.setTime(90)}>
+              1:30
+          </a>
+        </div>
+        
       </div>
       </div>
       </section>
