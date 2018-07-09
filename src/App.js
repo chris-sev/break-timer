@@ -9,7 +9,7 @@ class App extends Component {
     clearInterval(this.timer);
   }
 
-  pad        = time => time < 10 ? `0${time}`: time;
+  pad        = time => (time < 10) ? `0${time}` : time;
   clearTimer = ()   => clearInterval(this.timer)
   addThirty  = () => this.setState({ seconds: this.state.seconds + 30 });
   
