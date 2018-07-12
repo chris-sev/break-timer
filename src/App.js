@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
-  state = { isRunning: false, seconds: 60 };
+  state = { 
+    isTouched: false,
+    isRunning: false, 
+    seconds: 0
+  };
   timer = null;
 
   componentWillUnmount() {
@@ -18,7 +22,7 @@ class App extends Component {
   }
 
   reset = () => {
-    this.setState({ seconds: 60 });
+    this.setState({ seconds: 0, isTouched: false });
     this.stop();
   }
   
@@ -41,7 +45,7 @@ class App extends Component {
   start = () => {
     if (!this.state.isRunning) {
       this.timer = setInterval(this.countDown, 1000);
-      this.setState({ isRunning : true });
+      this.setState({ isRunning : true, isTouched: true });
     }
   }
 
@@ -53,7 +57,9 @@ class App extends Component {
   countDown = () => {
     const seconds = this.state.seconds - 1;
     this.setState({ seconds });
-    if (seconds === 0) this.stop();
+    if (seconds === 0) {
+      clearInterval(this.timer);
+    }
   }
 
   stop = () => {
@@ -86,16 +92,17 @@ class App extends Component {
    * --------------------------------------------------
    */
   render() {
-    const { seconds } = this.state;
+    const { seconds, isTouched, isRunning } = this.state;
     const time = this.secondsToTime(seconds);
 
     // color
     let heroColor = 'is-info';
-    if (seconds < 15) heroColor = 'is-danger';
+    if (!isTouched) heroColor = 'is-info';
+    else if (seconds < 15) heroColor = 'is-danger';
     else if (seconds < 30) heroColor = 'is-warning';
 
     // flashing at 0
-    const isFlashing = seconds === 0 ? 'is-flashing' : '';
+    const isFlashing = (isTouched && seconds === 0) ? 'is-flashing' : '';
 
     return (
       <section className={`hero is-fullheight ${heroColor} ${isFlashing}`}>
@@ -111,11 +118,14 @@ class App extends Component {
 
         {/* set times -------------------------------------- */}
         <div className="action-buttons">
-          <a 
-            className="button is-white is-outlined is-rounded" 
-            onClick={this.reset}>
-              Reset
-          </a>
+
+          {isRunning &&
+            <a 
+              className="button is-white is-outlined is-rounded" 
+              onClick={this.reset}>
+                Reset
+            </a>}
+            
           {/* <a 
             className="button is-white is-large is-outlined is-rounded" 
             onClick={() => this.setTime(30)}>
