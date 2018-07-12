@@ -84,8 +84,8 @@ class App extends Component {
 
     // color
     let heroColor = 'is-info';
-    if (seconds <= 10) heroColor = 'is-danger';
-    else if (seconds <= 30) heroColor = 'is-warning';
+    if (seconds < 10) heroColor = 'is-danger';
+    else if (seconds < 30) heroColor = 'is-warning';
 
     // flashing at 0
     const isFlashing = seconds === 0 ? 'is-flashing' : '';
