@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
-  state = { seconds: 60 };
+  state = { isRunning: false, seconds: 60 };
   timer = null;
 
   componentWillUnmount() {
@@ -11,7 +11,10 @@ class App extends Component {
 
   pad        = time => (time < 10) ? `0${time}` : time;
   clearTimer = ()   => clearInterval(this.timer)
-  addThirty  = () => this.setState({ seconds: this.state.seconds + 30 });
+  addThirty  = () => {
+    this.setState({ seconds: this.state.seconds + 30 });
+    this.startTimer();
+  }
   
   /**
    * --------------------------------------------------
@@ -26,10 +29,14 @@ class App extends Component {
   /**
    * --------------------------------------------------
    * Start our countdown
+   * Checks to see if its running already
    * --------------------------------------------------
    */
   startTimer = () => {
-    if (!this.timer) this.timer = setInterval(this.countDown, 1000);
+    if (!this.state.isRunning) {
+      this.timer = setInterval(this.countDown, 1000);
+      this.setState({ isRunning : true });
+    }
   }
 
   /**
@@ -40,7 +47,11 @@ class App extends Component {
   countDown = () => {
     const seconds = this.state.seconds - 1;
     this.setState({ seconds });
-    if (seconds === 0) clearInterval(this.timer);
+
+    if (seconds === 0) {
+      clearInterval(this.timer);
+      this.setState({ isRunning: false });
+    }
   }
 
   /**
@@ -68,10 +79,19 @@ class App extends Component {
    * --------------------------------------------------
    */
   render() {
-    const time = this.secondsToTime(this.state.seconds);
+    const { seconds } = this.state;
+    const time = this.secondsToTime(seconds);
+
+    // color
+    let heroColor = 'is-info';
+    if (seconds <= 10) heroColor = 'is-danger';
+    else if (seconds <= 30) heroColor = 'is-warning';
+
+    // flashing at 0
+    const isFlashing = seconds === 0 ? 'is-flashing' : '';
 
     return (
-      <section className="hero is-fullheight is-info">
+      <section className={`hero is-fullheight ${heroColor} ${isFlashing}`}>
       <div className="hero-body">
       <div className="container has-text-centered">
 
@@ -85,19 +105,19 @@ class App extends Component {
         {/* set times -------------------------------------- */}
         <div className="action-buttons">
           <a 
-            className="button is-white is-outlined is-rounded" 
+            className="button is-white is-large is-outlined is-rounded" 
             onClick={() => this.setTime(30)}>
               0:30
           </a>
 
           <a 
-            className="button is-white is-outlined is-rounded" 
+            className="button is-white is-large is-outlined is-rounded" 
             onClick={() => this.setTime(60)}>
               1:00
           </a>
 
           <a 
-            className="button is-white is-outlined is-rounded" 
+            className="button is-white is-large is-outlined is-rounded" 
             onClick={() => this.setTime(90)}>
               1:30
           </a>

@@ -9,3 +9,13 @@ h1 {
 .action-buttons .button:not(:last-child) {
   margin-right: 8px;
 }
+
+.is-flashing {
+  animation: flash linear 1s infinite;
+}
+
+@keyframes flash {
+	0% { opacity: 1; } 
+	50% { opacity: 0.55; } 
+	100% { opacity: 1; }
+}
