@@ -2,8 +2,10 @@ body {
   font-family: 'IBM Plex Mono';
 }
 
-h1 {
-  font-size: 150px !important;
+@media screen and (min-width: 1024px) {
+  h1 {
+    font-size: 10rem !important;
+  }
 }
 
 .action-buttons .button:not(:last-child) {

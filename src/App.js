@@ -11,9 +11,15 @@ class App extends Component {
 
   pad        = time => (time < 10) ? `0${time}` : time;
   clearTimer = ()   => clearInterval(this.timer)
-  addThirty  = () => {
+
+  addThirty = () => {
     this.setState({ seconds: this.state.seconds + 30 });
-    this.startTimer();
+    this.start();
+  }
+
+  reset = () => {
+    this.setState({ seconds: 60 });
+    this.stop();
   }
   
   /**
@@ -23,7 +29,7 @@ class App extends Component {
    */
   setTime = seconds => {
     this.setState({ seconds });
-    this.startTimer();
+    this.start();
   }
 
   /**
@@ -32,7 +38,7 @@ class App extends Component {
    * Checks to see if its running already
    * --------------------------------------------------
    */
-  startTimer = () => {
+  start = () => {
     if (!this.state.isRunning) {
       this.timer = setInterval(this.countDown, 1000);
       this.setState({ isRunning : true });
@@ -47,11 +53,12 @@ class App extends Component {
   countDown = () => {
     const seconds = this.state.seconds - 1;
     this.setState({ seconds });
+    if (seconds === 0) this.stop();
+  }
 
-    if (seconds === 0) {
-      clearInterval(this.timer);
-      this.setState({ isRunning: false });
-    }
+  stop = () => {
+    clearInterval(this.timer);
+    this.setState({ isRunning: false });
   }
 
   /**
@@ -84,7 +91,7 @@ class App extends Component {
 
     // color
     let heroColor = 'is-info';
-    if (seconds < 10) heroColor = 'is-danger';
+    if (seconds < 15) heroColor = 'is-danger';
     else if (seconds < 30) heroColor = 'is-warning';
 
     // flashing at 0
@@ -105,6 +112,11 @@ class App extends Component {
         {/* set times -------------------------------------- */}
         <div className="action-buttons">
           <a 
+            className="button is-white is-outlined is-rounded" 
+            onClick={this.reset}>
+              Reset
+          </a>
+          {/* <a 
             className="button is-white is-large is-outlined is-rounded" 
             onClick={() => this.setTime(30)}>
               0:30
@@ -120,7 +132,7 @@ class App extends Component {
             className="button is-white is-large is-outlined is-rounded" 
             onClick={() => this.setTime(90)}>
               1:30
-          </a>
+          </a> */}
         </div>
         
       </div>
